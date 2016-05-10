@@ -1,0 +1,30 @@
+- name: Install php deps
+  apt: name=python-software-properties state=present
+
+- name: Add ppa:ondrej
+  apt_repository: repo=ppa:ondrej/php5-{{ php_version }}
+
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=86400
+
+- name: Install php packages
+  apt: name={{ item }} state=present
+  with_items:
+  - php5-common
+  - php5-mysqlnd
+  - php5-xmlrpc
+  - php5-curl
+  - php5-gd
+  - php5-cli
+  - php5-fpm
+  - php-pear
+  - php5-dev
+  - php5-imap
+  - php5-mcrypt
+  - php5-memcache
+
+- name: Set post_max_size to {{ php_post_max_size }}M
+  lineinfile: dest=/etc/php5/fpm/php.ini regexp="^post_max_size = .*$" line="post_max_size = {{ php_post_max_size }}M"
+
+- name: Set upload_max_filesize to {{ php_upload_max_filesize }}M
+  lineinfile: dest=/etc/php5/fpm/php.ini regexp="^upload_max_filesize = .*$" line="upload_max_filesize = {{ php_upload_max_filesize }}M"
