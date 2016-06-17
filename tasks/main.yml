@@ -28,3 +28,6 @@
 
 - name: Set upload_max_filesize to {{ php_upload_max_filesize }}M
   lineinfile: dest=/etc/php5/fpm/php.ini regexp="^upload_max_filesize = .*$" line="upload_max_filesize = {{ php_upload_max_filesize }}M"
+
+- name: Set memory_limit to {{ php_memory_limit }}
+  lineinfile: dest=/etc/php5/fpm/php.ini regexp="^memory_limit = .*$" line="memory_limit = {{ php_memory_limit }}M"
