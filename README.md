@@ -10,6 +10,7 @@ Installs the latest PHP5 and associated packages on an ubuntu host
 - `php_version` - The version of PHP to install. (**5.6**)
 - `php_post_max_size` - Max size (in Mb) for POST requests. (**30**)
 - `php_upload_max_filesize` - Max size (in Mb) for uploads. (**30**)
+- `php_pm_max_children` - FPM max children. (**10**)
 
 Usage
 -----

@@ -32,3 +32,7 @@
 
 - name: Set memory_limit to {{ php_memory_limit }}
   lineinfile: dest=/etc/php5/fpm/php.ini regexp="^memory_limit = .*$" line="memory_limit = {{ php_memory_limit }}M"
+
+- name: Set FPM max_children
+  lineinfile: dest=/etc/php5/fpm/pool.d/www.conf regexp="^pm.max_children = .*$" line="pm.max_children = {{ php_pm_max_children | default('10') }}"
+  
