@@ -1,4 +1,4 @@
 php_version: 5.6
-php_post_max_size: 30
+php_post_max_size: 32
 php_upload_max_filesize: 30
 php_memory_limit: 512
