@@ -35,3 +35,71 @@
 
 - name: Set FPM max_children
   lineinfile: dest=/etc/php5/fpm/pool.d/www.conf regexp="^pm.max_children = .*$" line="pm.max_children = {{ php_pm_max_children | default('10') }}"
+
+# Automatic dimensioning with upstart
+- name: Install python dependencies
+  apt:
+      name: "{{ item }}"
+      state: installed
+  with_items:
+    - python-dev
+    - python-setuptools
+    - python-virtualenv
+    - python-ldap
+    - libsasl2-dev
+    - libldap2-dev
+    - libssl-dev
+    - libffi-dev
+
+- name: Create scripts directory
+  file:
+    path: "{{ scripts_dir }}/php"
+    state: directory
+    owner: "{{ scripts_owner }}"
+    group: "{{ scripts_group }}"
+    recurse: yes
+    mode: 0755
+
+- name: Create virtualenv directory
+  file:
+    path: "{{ virtualenv_dir }}/php"
+    state: directory
+    owner: "{{ scripts_owner }}"
+    group: "{{ scripts_group }}"
+    recurse: yes
+    mode: 0755
+  when: create_virtualenv|bool
+
+- name: Copy requirements file
+  copy:
+    src: requirements.txt
+    dest: "{{ scripts_dir }}/php/requirements.txt"
+    owner: "{{ scripts_owner }}"
+    group: "{{ scripts_group }}"
+    mode: 0755
+  when: create_virtualenv|bool
+
+- name: Create virtualenv if create_virtualenv is specified
+  pip:
+    requirements: "{{ scripts_dir }}/php/requirements.txt"
+    virtualenv: "{{ virtualenv_dir }}/php"
+    state: latest
+  when: create_virtualenv|bool
+
+- name: Copy Python script which will dimension PHP-FPM
+  copy:
+    src: "{{ item }}"
+    dest: "{{ scripts_dir }}/php/{{ item }}"
+    owner: "{{ scripts_owner }}"
+    group: "{{ scripts_group }}"
+    mode: 0755
+  with_items:
+    - fpm_dimensioning.py
+
+- name: Install PHP-FPM dimensioning upstart script
+  template:
+    src: upstart/fpm_dimensioning.conf.j2
+    dest: /etc/init/fpm_dimensioning.conf
+    owner: root
+    group: root
+    mode: 0644
