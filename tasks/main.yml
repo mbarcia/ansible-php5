@@ -45,11 +45,6 @@
     - python-dev
     - python-setuptools
     - python-virtualenv
-    - python-ldap
-    - libsasl2-dev
-    - libldap2-dev
-    - libssl-dev
-    - libffi-dev
 
 - name: Create scripts directory
   file:

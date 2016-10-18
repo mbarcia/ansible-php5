@@ -35,3 +35,4 @@ Author Information
 * Chris Warren - chris@beamly.com
 * Neil Saunders - neil@beamly.com
 * Mariano Barcia - mariano.barcia@beamly.com
+* Vik Batthi - vik@beamly.com
